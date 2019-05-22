@@ -8,9 +8,9 @@ namespace CsvProcessor.Processors
 {
     class LpFileProcessor : IFileProcessor<LpFile>
     {
-        public int CalculateMedian(LpFile file)
+        public int CalculateMedian(IEnumerable<LpFile> file)
         {
-            return file.MeterPointCode;
+            return 0;
         }
     }
 }

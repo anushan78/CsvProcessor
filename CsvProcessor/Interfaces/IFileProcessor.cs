@@ -6,6 +6,6 @@ namespace CsvProcessor.Interfaces
 {
     public interface IFileProcessor<T> where T : ICsvFile
     {
-        int CalculateMedian(T type);
+        int CalculateMedian(IEnumerable<T> type);
     }
 }

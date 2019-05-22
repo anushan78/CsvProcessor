@@ -8,9 +8,9 @@ namespace CsvProcessor.Processors
 {
     public class TouFileProcessor : IFileProcessor<TouFile>
     {
-        public int CalculateMedian(TouFile file)
+        public int CalculateMedian(IEnumerable<TouFile> files)
         {
-            return file.MeterPointCode;
+            return 0;
         }
     }
 }
