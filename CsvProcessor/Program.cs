@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CsvHelper;
+using CsvProcessor.Configurations;
 using CsvProcessor.Interfaces;
 using CsvProcessor.Processors;
+using CsvProcessor.Services;
 using CsvProcessor.Types;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -15,62 +17,34 @@ namespace CsvProcessor
     {
         static void Main(string[] args)
         {
-            var serviceProvider = new ServiceCollection()
-                .AddSingleton<IFileProcessor<TouFile>, TouFileProcessor>()
-                .AddSingleton<IFileProcessor<LpFile>, LpFileProcessor>()
-                .BuildServiceProvider();
+            // create service collection
+            var serviceCollection = new ServiceCollection();
+            ConfigureServices(serviceCollection);
 
-            IConfiguration config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
+            // create service provider
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+
+            // Entry to runn app
+            serviceProvider.GetService<App>().Run();
+        }
+
+        private static void ConfigureServices(IServiceCollection serviceCollection)
+        {
+            // build configuration
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", false)
                 .Build();
+            serviceCollection.AddOptions();
+            serviceCollection.Configure<CsvSettings>(configuration.GetSection("CsvSettings"));
 
-            var filePath = config["csvFilePath"];
-            Console.WriteLine(filePath);
+            // add services
+            serviceCollection.AddSingleton<ICsvFileService, CsvFileService>();
+            serviceCollection.AddSingleton<IFileProcessor<TouFile>, TouFileProcessor>();
+            serviceCollection.AddSingleton<IFileProcessor<LpFile>, LpFileProcessor>();
 
-            var filesList = Directory.GetFiles(filePath);
-
-            if (filesList.Length > 0)
-            {
-                foreach (var file in filesList)
-                {
-                    // Move this to a filehelper class
-                    ProcessCsvFile(file);
-                }
-            }
-
-            var touFileProcessor = serviceProvider.GetService<IFileProcessor<TouFile>>();
-            var lpFileProcessor = serviceProvider.GetService<IFileProcessor<LpFile>>();
-
-            var touFile = new TouFile() {MeterPointCode = 234};
-           // Console.WriteLine(touFileProcessor.CalculateMedian(touFile));
-
-            var lpFile = new LpFile() {MeterPointCode = 445};
-            //Console.WriteLine(lpFileProcessor.CalculateMedian(lpFile));
-
-            Console.WriteLine("Hello World!");
-        }
-
-        public static void ProcessCsvFile(string file)
-        {
-            using (var fileStreamReader = new StreamReader(file))
-            {
-                using (var csvReader = new CsvReader(fileStreamReader))
-                {
-                    if (Path.GetFileName(file).StartsWith("TOU_"))
-                    {
-                        var records = csvReader.GetRecords<TouFile>();
-                    }
-                    else if (Path.GetFileName(file).StartsWith("TOU_"))
-                    {
-
-                    }
-                }
-            }
-        }
-
-        public static void ProcessTouFile(IEnumerable<TouFile> touFileRecords)
-        {
-
+            // add app
+            serviceCollection.AddTransient<App>();
         }
     }
 }
