@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CsvProcessor.Configurations
+﻿namespace CsvProcessor.Configurations
 {
     public class CsvSettings
     {

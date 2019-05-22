@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CsvHelper.Configuration.Attributes;
+﻿using CsvHelper.Configuration.Attributes;
 using CsvProcessor.Interfaces;
+using System;
 
 namespace CsvProcessor.Types
 {

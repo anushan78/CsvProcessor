@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CsvProcessor.Services;
+﻿using CsvProcessor.Services;
+using System;
 
 namespace CsvProcessor
 {
