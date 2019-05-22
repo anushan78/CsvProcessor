@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CsvProcessor.Interfaces;
+﻿using CsvProcessor.Interfaces;
 using CsvProcessor.Types;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CsvProcessor.Processors
 {
     class LpFileProcessor : IFileProcessor<LpFile>
     {
-        public int CalculateMedian(IEnumerable<LpFile> file)
+        public decimal CalculateMedian(IEnumerable<LpFile> files)
         {
-            return 0;
+            return files.Select(fileRecord => fileRecord.Value).Average();
         }
     }
 }

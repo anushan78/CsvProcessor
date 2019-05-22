@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CsvProcessor.Interfaces;
+﻿using CsvProcessor.Interfaces;
 using CsvProcessor.Types;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CsvProcessor.Processors
 {
     public class TouFileProcessor : IFileProcessor<TouFile>
     {
-        public int CalculateMedian(IEnumerable<TouFile> files)
+        public decimal CalculateMedian(IEnumerable<TouFile> files)
         {
-            return 0;
+            return files.Select(fileRecord => fileRecord.Energy).Average();
         }
     }
 }

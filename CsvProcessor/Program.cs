@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using CsvHelper;
-using CsvProcessor.Configurations;
+﻿using CsvProcessor.Configurations;
 using CsvProcessor.Interfaces;
 using CsvProcessor.Processors;
 using CsvProcessor.Services;
 using CsvProcessor.Types;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System.IO;
 
 namespace CsvProcessor
 {

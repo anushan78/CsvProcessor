@@ -1,10 +1,11 @@
-﻿using CsvProcessor.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CsvHelper;
 using CsvProcessor.Configurations;
+using CsvProcessor.Interfaces;
 using CsvProcessor.Types;
 using Microsoft.Extensions.Options;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace CsvProcessor.Services
 {
@@ -23,12 +24,45 @@ namespace CsvProcessor.Services
 
         public void Process()
         {
-            var filePath = _csvSettings.CsvFilePath;
+            var filesList = Directory.GetFiles(_csvSettings.CsvFilePath);
 
-            var touFiles = new List<TouFile>();
-            touFiles.Add(new TouFile() { Energy = 2 });
+            if (filesList.Length > 0)
+            {
+                foreach (var file in filesList)
+                {
+                    using (var fileStreamReader = new StreamReader(file))
+                    {
+                        using (var csvReader = new CsvReader(fileStreamReader))
+                        {
+                            if (Path.GetFileName(file).StartsWith("TOU_"))
+                            {
+                                var touRecords = csvReader.GetRecords<TouFile>().ToList();
+                                var touMedian = _touFileProcessor.CalculateMedian(touRecords);
+                                foreach (var record in touRecords)
+                                {
+                                    if (record.Energy > (touMedian / 5))
+                                        this.PrintRecord(Path.GetFileName(file), record.DateTime, record.Energy, touMedian);
+                                }
+                            }
+                            else if (Path.GetFileName(file).StartsWith("LP_"))
+                            {
+                                var lpRecords = csvReader.GetRecords<LpFile>().ToList();
+                                var lpMedian = _lpFileProcessor.CalculateMedian(lpRecords);
+                                foreach (var record in lpRecords)
+                                {
+                                    if (record.Value > lpMedian / 5)
+                                        this.PrintRecord(Path.GetFileName(file), record.DateTime, record.Value, lpMedian);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-            Console.WriteLine(_touFileProcessor.CalculateMedian(touFiles));
+        private void PrintRecord(string fileName, DateTime recordDateTime, decimal value, decimal medianValue)
+        {
+            Console.WriteLine($"{fileName} {recordDateTime} {value} {medianValue}");
         }
     }
 }
