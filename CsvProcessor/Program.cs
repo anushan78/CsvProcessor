@@ -18,8 +18,11 @@ namespace CsvProcessor
             var touFileProcessor = serviceProvider.GetService<IFileProcessor<TouFile>>();
             var lpFileProcessor = serviceProvider.GetService<IFileProcessor<LpFile>>();
 
-            Console.WriteLine(touFileProcessor.CalculateMedian(new TouFile()));
-            Console.WriteLine(lpFileProcessor.CalculateMedian(new LpFile()));
+            var touFile = new TouFile() { MeterPointCode = 234 };
+            Console.WriteLine(touFileProcessor.CalculateMedian(touFile));
+
+            var lpFile = new LpFile() { MeterPointCode = 445 };
+            Console.WriteLine(lpFileProcessor.CalculateMedian(lpFile));
 
             Console.WriteLine("Hello World!");
         }

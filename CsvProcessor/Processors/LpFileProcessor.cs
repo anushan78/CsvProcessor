@@ -10,7 +10,7 @@ namespace CsvProcessor.Processors
     {
         public int CalculateMedian(LpFile file)
         {
-            return 5;
+            return file.MeterPointCode;
         }
     }
 }
