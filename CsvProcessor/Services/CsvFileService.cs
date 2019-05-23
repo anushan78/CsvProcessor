@@ -49,7 +49,7 @@ namespace CsvProcessor.Services
                         var touMedian = _touFileProcessor.CalculateMedian(touRecords);
                         foreach (var record in touRecords)
                         {
-                            if (record.Energy < (touMedian * 0.8M) || record.Energy > 1.2M)
+                            if (record.Energy < (touMedian * 0.8M) || record.Energy > (touMedian * 1.2M))
                                 this.PrintRecord(Path.GetFileName(file), record.DateTime, record.Energy, touMedian);
                         }
                     }
@@ -59,7 +59,7 @@ namespace CsvProcessor.Services
                         var lpMedian = _lpFileProcessor.CalculateMedian(lpRecords);
                         foreach (var record in lpRecords)
                         {
-                            if (record.Value > lpMedian / 5)
+                            if (record.Value < (lpMedian * 0.8M) || record.Value > (lpMedian * 1.2M))
                                 this.PrintRecord(Path.GetFileName(file), record.DateTime, record.Value, lpMedian);
                         }
                     }
