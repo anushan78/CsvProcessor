@@ -9,12 +9,21 @@ using System.Linq;
 
 namespace CsvProcessor.Services
 {
+    /// <summary>
+    /// Defines Csv file processing service routines.
+    /// </summary>
     public class CsvFileService : ICsvFileService
     {
         private readonly IFileProcessor<TouFile> _touFileProcessor;
         private readonly IFileProcessor<LpFile> _lpFileProcessor;
         private readonly CsvSettings _csvSettings;
 
+        /// <summary>
+        /// Constructor for csv service.
+        /// </summary>
+        /// <param name="touFileProcessor">TOU File processor.</param>
+        /// <param name="lpFileProcessor">LP File processor.</param>
+        /// <param name="csvSettings">Csv settings.</param>
         public CsvFileService(IFileProcessor<TouFile> touFileProcessor, IFileProcessor<LpFile> lpFileProcessor, IOptions<CsvSettings> csvSettings)
         {
             _touFileProcessor = touFileProcessor;
@@ -22,6 +31,9 @@ namespace CsvProcessor.Services
             _csvSettings = csvSettings.Value;
         }
 
+        /// <summary>
+        /// Process the specified csv file.
+        /// </summary>
         public void Process()
         {
             var filesList = Directory.GetFiles(_csvSettings.CsvFilePath);
@@ -56,6 +68,13 @@ namespace CsvProcessor.Services
             }
         }
 
+        /// <summary>
+        /// Prints a record to the console with specified strings.
+        /// </summary>
+        /// <param name="fileName">File name.</param>
+        /// <param name="recordDateTime">Record Date Time.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="medianValue">The median value.</param>
         private void PrintRecord(string fileName, DateTime recordDateTime, decimal value, decimal medianValue)
         {
             Console.WriteLine($"{fileName} {recordDateTime} {value} {medianValue}");

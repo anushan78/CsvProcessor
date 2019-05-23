@@ -7,13 +7,26 @@ using System.Linq;
 
 namespace CsvProcessor.Processors
 {
+    /// <summary>
+    /// Implements file processing utilities for the Lp type files.
+    /// </summary>
     class LpFileProcessor : IFileProcessor<LpFile>
     {
+        /// <summary>
+        /// Calculates the median of the specified list.
+        /// </summary>
+        /// <param name="files">LPFiles list.</param>
+        /// <returns>calculated median value.</returns>
         public decimal CalculateMedian(IEnumerable<LpFile> files)
         {
             return files.Select(fileRecord => fileRecord.Value).Average();
         }
 
+        /// <summary>
+        /// Returns list of records in the file casted to the specified type.
+        /// </summary>
+        /// <param name="file">The full bath for the file.</param>
+        /// <returns>>List of records casted to the specified type.</returns>
         public IEnumerable<LpFile> GetAllRecords(string file)
         {
             using (var fileStreamReader = new StreamReader(file))

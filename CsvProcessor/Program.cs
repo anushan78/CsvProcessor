@@ -13,20 +13,20 @@ namespace CsvProcessor
     {
         static void Main(string[] args)
         {
-            // create service collection
+            // Create service collection
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
 
-            // create service provider
+            // Create service provider
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            // Entry to runn app
+            // Entry to run our csv processor service
             serviceProvider.GetService<App>().Run();
         }
 
         private static void ConfigureServices(IServiceCollection serviceCollection)
         {
-            // build configuration
+            // Build configurations from appsettings
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", false)
@@ -34,12 +34,12 @@ namespace CsvProcessor
             serviceCollection.AddOptions();
             serviceCollection.Configure<CsvSettings>(configuration.GetSection("CsvSettings"));
 
-            // add services
+            // Inserts services into service collection
             serviceCollection.AddSingleton<ICsvFileService, CsvFileService>();
             serviceCollection.AddSingleton<IFileProcessor<TouFile>, TouFileProcessor>();
             serviceCollection.AddSingleton<IFileProcessor<LpFile>, LpFileProcessor>();
 
-            // add app
+            // Includes the app.
             serviceCollection.AddTransient<App>();
         }
     }

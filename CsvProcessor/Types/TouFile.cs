@@ -4,6 +4,9 @@ using System;
 
 namespace CsvProcessor.Types
 {
+    /// <summary>
+    ///  Defines properties specific for TOU type csv files.
+    /// </summary>
     public class TouFile : CsvFileBase, ICsvFile
     {
         public decimal Energy { get; set; }

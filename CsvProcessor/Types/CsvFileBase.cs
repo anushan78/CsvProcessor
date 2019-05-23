@@ -3,6 +3,9 @@ using System;
 
 namespace CsvProcessor.Types
 {
+    /// <summary>
+    /// Defines base properties for csv files.
+    /// </summary>
     public abstract class CsvFileBase
     {
         [Name("MeterPoint Code")]

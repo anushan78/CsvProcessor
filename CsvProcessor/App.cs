@@ -3,6 +3,9 @@ using System;
 
 namespace CsvProcessor
 {
+    /// <summary>
+    /// Initiator for the csv processor.
+    /// </summary>
     public class App
     {
         private readonly ICsvFileService _csvFileService;
@@ -12,6 +15,9 @@ namespace CsvProcessor
             _csvFileService = csvFileService;
         }
 
+        /// <summary>
+        /// Initiates csv processing.
+        /// </summary>
         public void Run()
         {
             _csvFileService.Process();
