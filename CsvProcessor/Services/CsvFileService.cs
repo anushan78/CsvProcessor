@@ -30,32 +30,28 @@ namespace CsvProcessor.Services
             {
                 foreach (var file in filesList)
                 {
-                    using (var fileStreamReader = new StreamReader(file))
+
+                    if (Path.GetFileName(file).StartsWith("TOU_"))
                     {
-                        using (var csvReader = new CsvReader(fileStreamReader))
+                        var touRecords = _touFileProcessor.GetAllRecords(file);
+                        var touMedian = _touFileProcessor.CalculateMedian(touRecords);
+                        foreach (var record in touRecords)
                         {
-                            if (Path.GetFileName(file).StartsWith("TOU_"))
-                            {
-                                var touRecords = csvReader.GetRecords<TouFile>().ToList();
-                                var touMedian = _touFileProcessor.CalculateMedian(touRecords);
-                                foreach (var record in touRecords)
-                                {
-                                    if (record.Energy > (touMedian / 5))
-                                        this.PrintRecord(Path.GetFileName(file), record.DateTime, record.Energy, touMedian);
-                                }
-                            }
-                            else if (Path.GetFileName(file).StartsWith("LP_"))
-                            {
-                                var lpRecords = csvReader.GetRecords<LpFile>().ToList();
-                                var lpMedian = _lpFileProcessor.CalculateMedian(lpRecords);
-                                foreach (var record in lpRecords)
-                                {
-                                    if (record.Value > lpMedian / 5)
-                                        this.PrintRecord(Path.GetFileName(file), record.DateTime, record.Value, lpMedian);
-                                }
-                            }
+                            if (record.Energy > (touMedian / 5))
+                                this.PrintRecord(Path.GetFileName(file), record.DateTime, record.Energy, touMedian);
                         }
                     }
+                    else if (Path.GetFileName(file).StartsWith("LP_"))
+                    {
+                        var lpRecords = _lpFileProcessor.GetAllRecords(file);
+                        var lpMedian = _lpFileProcessor.CalculateMedian(lpRecords);
+                        foreach (var record in lpRecords)
+                        {
+                            if (record.Value > lpMedian / 5)
+                                this.PrintRecord(Path.GetFileName(file), record.DateTime, record.Value, lpMedian);
+                        }
+                    }
+
                 }
             }
         }
